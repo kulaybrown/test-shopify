@@ -1,0 +1,78 @@
+// This targets the automatic container Shopify puts around your header file
+[id^="shopify-section-sections--"][id$="__header"],
+#shopify-section-header {
+  position: relative;
+  z-index: 100; /* Elevates the wrapper element itself above all homepage content */
+}
+
+/* ==========================================================================
+   Site Header Container Configuration
+   ========================================================================== */
+.site-header {
+  height: 5rem;
+
+  position: relative; 
+  padding: 0 2rem;
+  background-color: #ffffff;
+  z-index: 50; 
+
+  // Instead of a standard border-bottom which absolute items can clip,
+  // we can use an explicit box-shadow layer or keep the border but adjust the child top alignment.
+  border-bottom: 1px solid #e5e5e5;
+
+  .container {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+/* ==========================================================================
+   Header Icons Action Controls Fix
+   ========================================================================== */
+.header__icons {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; // Clean spacing between account and cart
+
+  a, shopify-account {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: #121212; /* Fallback icon color */
+    cursor: pointer;
+    position: relative;
+
+    // Force inner SVGs to be visible and sized correctly
+    svg {
+      width: 1.5rem !important;
+      height: 1.5rem !important;
+      display: block;
+      fill: currentColor; /* Inherits the black color from the link */
+      stroke: currentColor;
+    }
+  }
+
+  // Cart Badge Position Adjustments
+  a sup {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #1d4ed8; /* Tailwind blue-700 */
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    min-width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(25%, -25%);
+    z-index: 10;
+    padding: 0 4px;
+  }
+}

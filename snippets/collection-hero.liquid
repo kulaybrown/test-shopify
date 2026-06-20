@@ -1,0 +1,33 @@
+{%- comment -%} 
+  Determine settings based on the current collection handle 
+{%- endcomment -%}
+{%- assign current_handle = collection.handle | downcase -%}
+
+{%- comment -%} 
+  Assign corresponding asset background images and clean title text based on handle
+{%- endcomment -%}
+{%- assign current_handle = collection.handle | downcase -%}
+
+{%- if current_handle contains 'for-mens' -%}
+  {%- assign hero_title = "Men's Collections" -%}
+  {%- assign hero_bg_image = 'hero-for-men.jpg' | asset_url -%}
+{%- elsif current_handle contains 'for-womens' -%}
+  {%- assign hero_title = "Women's Collections" -%}
+  {%- assign hero_bg_image = 'hero-for-women.jpg' | asset_url -%}
+{%- endif -%}
+
+
+<section 
+  class="{% if hero_bg_image == blank %}hidden{% endif %} relative overflow-hidden bg-gray-900 bg-cover bg-center bg-no-repeat py-24 lg:py-32 mb-10"
+  style="{% if hero_bg_image != blank %}background-image: url('{{ hero_bg_image }}');{% endif %}"
+>
+  
+  <div class="absolute inset-0 bg-gray-900/40 backdrop-brightness-75 z-0"></div>
+
+  <div class="max-w-7xl mx-auto px-4 relative z-10 text-center">
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white uppercase drop-shadow-md">
+      {{ hero_title }}
+    </h1>
+  </div>
+</section>
+

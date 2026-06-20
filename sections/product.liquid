@@ -1,52 +1,161 @@
-{% comment %}
-  This section is used in the product template to render product page with
-  media, content, and add-to-cart form.
+<nav class="bg-white border-b border-gray-200 py-3 mb-8" aria-label="Breadcrumb">
+  <div class="max-w-7xl mx-auto px-4 text-sm text-gray-500 flex items-center space-x-2">
+    <a href="{{ routes.root_url }}" class="hover:text-blue-600 font-medium transition">Home</a>
+    <span class="text-gray-400">/</span>
+    
+    {% if collection %}
+      <a href="{{ collection.url }}" class="hover:text-blue-600 font-medium transition capitalize">{{ collection.title }}</a>
+      <span class="text-gray-400">/</span>
+    {% endif %}
+    
+    <span class="text-gray-900 font-semibold truncate" aria-current="page">{{ product.title }}</span>
+  </div>
+</nav>
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/product
-{% endcomment %}
+<div class="max-w-7xl mx-auto px-4 pb-16">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+    
+    <div class="space-y-4">
+      <div class="aspect-square bg-gray-100 rounded-xl overflow-hidden border border-gray-200 shadow-xs">
+        {% if product.featured_image != blank %}
+          <img 
+            src="{{ product.featured_image | image_url: width: 800 }}" 
+            alt="{{ product.title | escape }}" 
+            class="w-full h-full object-cover"
+            id="main-product-image"
+            width="{{ product.featured_image.width }}"
+            height="{{ product.featured_image.height }}"
+          >
+        {% else %}
+          {{ 'product-1' | placeholder_svg_tag: 'w-full h-full bg-gray-200' }}
+        {% endif %}
+      </div>
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
+      {% if product.images.size > 1 %}
+        <div class="grid grid-cols-4 gap-3">
+          {% for image in product.images %}
+            <button 
+              type="button" 
+              class="aspect-square bg-gray-50 rounded-lg overflow-hidden border border-gray-200 hover:border-blue-600 transition thumbnail-trigger"
+              data-target-src="{{ image | image_url: width: 800 }}"
+            >
+              <img 
+                src="{{ image | image_url: width: 200 }}" 
+                alt="{{ product.title | escape }}" 
+                class="w-full h-full object-cover"
+                loading="lazy"
+                width="{{ image.width }}"
+                height="{{ image.height }}"
+              >
+            </button>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="lg:sticky lg:top-8 space-y-6">
+      
+      <div>
+        {% if product.vendor != blank %}
+          <span class="text-xs font-bold tracking-wider text-blue-600 uppercase">{{ product.vendor }}</span>
+        {% endif %}
+        <h1 class="text-3xl font-extrabold text-gray-900 mt-1 tracking-tight">{{ product.title }}</h1>
+      </div>
+
+      <div class="flex items-baseline space-x-3 bg-gray-50 p-4 rounded-lg border border-gray-200/60">
+        <span class="text-2xl font-black text-gray-900">{{ product.price | money }}</span>
+        
+        {% if product.compare_at_price > product.price %}
+          <span class="text-sm text-red-500 font-medium line-through">{{ product.compare_at_price | money }}</span>
+          <span class="bg-red-50 text-red-700 text-xs font-bold px-2 py-0.5 rounded border border-red-100">SAVE MORE</span>
+        {% endif %}
+      </div>
+
+      {% form 'product', product, class: 'space-y-6' %}
+        
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+
+        {% unless product.has_only_default_variant %}
+          <div class="space-y-2">
+            <label class="block text-sm font-semibold text-gray-700">Select Options</label>
+            <select name="id" class="w-full px-4 py-2.5 border border-gray-300 rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+              {% for variant in product.variants %}
+                <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                  {{ variant.title }} - {% if variant.available %}{{ variant.price | money }}{% else %}Sold Out{% endif %}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endunless %}
+
+        <div class="space-y-2">
+          <label for="Quantity" class="block text-sm font-semibold text-gray-700">Quantity</label>
+          <div class="flex items-center w-32 border border-gray-300 rounded-md overflow-hidden bg-white">
+            <button type="button" id="qty-minus" class="px-3 py-2 text-gray-500 hover:bg-gray-100 font-bold transition select-none">-</button>
+            <input type="number" id="Quantity" name="quantity" value="1" min="1" class="w-full text-center border-none text-sm font-medium p-0 focus:outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+            <button type="button" id="qty-plus" class="px-3 py-2 text-gray-500 hover:bg-gray-100 font-bold transition select-none">+</button>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button 
+            type="submit" 
+            name="add"
+            {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+            class="w-full py-4 px-6 bg-gray-900 text-white font-bold text-sm tracking-wider uppercase rounded-md shadow-xs hover:bg-gray-800 active:scale-99 transition disabled:bg-gray-300 disabled:cursor-not-allowed disabled:transform-none"
+          >
+            {% if product.selected_or_first_available_variant.available %}
+              Add To Cart
+            {% else %}
+              Sold Out
+            {% endif %}
+          </button>
+        </div>
+
+      {% endform %}
+
+      {% if product.description != blank %}
+        <div class="border-t border-gray-200 pt-6">
+          <h3 class="text-sm font-bold uppercase text-gray-900 tracking-wider mb-3">Product Details</h3>
+          <div class="prose prose-sm text-gray-600 leading-relaxed max-w-none">
+            {{ product.description }}
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
 </div>
 
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 1. Core Quantity Management Mechanics
+    const qtyInput = document.getElementById('Quantity');
+    const btnMinus = document.getElementById('qty-minus');
+    const btnPlus = document.getElementById('qty-plus');
 
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
+    if(qtyInput && btnMinus && btnPlus) {
+      btnMinus.addEventListener('click', () => {
+        let currentVal = parseInt(qtyInput.value) || 1;
+        if(currentVal > 1) qtyInput.value = currentVal - 1;
+      });
+      btnPlus.addEventListener('click', () => {
+        let currentVal = parseInt(qtyInput.value) || 1;
+        qtyInput.value = currentVal + 1;
+      });
+    }
 
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
+    // 2. Media Swapping Engine Handler
+    const mainImg = document.getElementById('main-product-image');
+    const thumbs = document.querySelectorAll('.thumbnail-trigger');
 
-    <input type="text" name="quantity" min="1" value="1">
-
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
-</div>
-
-{% schema %}
-{
-  "name": "t:general.product",
-  "settings": [],
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  }
-}
-{% endschema %}
+    thumbs.forEach(thumb => {
+      thumb.addEventListener('click', function() {
+        const targetSrc = this.getAttribute('data-target-src');
+        if(mainImg && targetSrc) {
+          mainImg.setAttribute('src', targetSrc);
+        }
+      });
+    });
+  });
+</script>

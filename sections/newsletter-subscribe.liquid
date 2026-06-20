@@ -1,0 +1,74 @@
+<div class="py-12 bg-gray-100 border-t border-b border-gray-200">
+  <div class="max-w-3xl mx-auto px-4 text-center">
+    
+    <h2 class="text-2xl font-bold text-gray-900 mb-2">
+      {{ section.settings.heading | default: "Subscribe to our newsletter" }}
+    </h2>
+    
+    <p class="text-sm text-gray-600 mb-6">
+      {{ section.settings.subheading }}
+    </p>
+
+    {% form 'customer', class: 'max-w-md mx-auto' %}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      
+      {% if form.posted_successfully? %}
+        <p class="text-green-600 font-medium text-sm bg-green-50 p-3 rounded">
+          Thanks for subscribing! Check your inbox soon.
+        </p>
+      {% else %}
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input 
+            type="email" 
+            name="contact[email]" 
+            placeholder="Enter your email address" 
+            class="flex-1 px-4 py-2.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+            required
+          >
+          <button 
+            type="submit" 
+            class="px-6 py-2.5 bg-gray-900 text-white font-medium text-sm rounded-md hover:bg-gray-800 transition"
+          >
+            {{ section.settings.button_text | default: "Subscribe" }}
+          </button>
+        </div>
+        
+        {% if form.errors %}
+          <p class="text-red-500 text-xs mt-2 text-left">{{ form.errors.messages['email'] }}</p>
+        {% endif %}
+      {% endif %}
+    {% endform %}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter Subscribe",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Stay in the Loop"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Sign up with your email address to receive news and updates."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Label",
+      "default": "Join"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter Subscribe"
+    }
+  ]
+}
+{% endschema %}

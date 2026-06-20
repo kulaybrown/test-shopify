@@ -20,6 +20,7 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
+    <script src="https://cdn.tailwindcss.com"></script>
     {{ 'main.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'main.js' | asset_url }}" defer></script>
     
@@ -33,7 +34,8 @@
     {% sections 'header-group' %}
 
     {{ content_for_layout }}
-
+    {% section 'newsletter-subscribe' %}
     {% sections 'footer-group' %}
+    {% section 'cart-drawer' %}
   </body>
 </html>
