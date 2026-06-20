@@ -1,0 +1,75 @@
+<div class="homepage-product-grid-wrapper">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <h2 class="section-title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <div class="product-grid">
+      {%- assign featured_collection = section.settings.collection -%}
+      
+      {%- comment -%} Loop through exactly 9 products to form a 3x3 grid {%- endcomment -%}
+      {% for product in featured_collection.products limit: 9 %}
+        <div class="product-card">
+          <a href="{{ product.url }}" class="product-link">
+            <div class="product-image-wrapper">
+                {% if product.featured_image != blank %}
+                  <img 
+                    src="{{ product.featured_image | image_url: width: 600 }}" 
+                    alt="{{ product.title | escape }}" 
+                    loading="lazy" 
+                    class="product-image"
+                    width="{{ product.featured_image.width }}"
+                    height="{{ product.featured_image.height }}"
+                  >
+                {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+            </div>
+            
+            <div class="product-info">
+              <h3 class="product-title">{{ product.title }}</h3>
+              <p class="product-price">{{ product.price | money }}</p>
+            </div>
+          </a>
+        </div>
+      {% else %}
+        {%- comment -%} On-boarding placeholder blocks if no collection is selected yet {%- endcomment -%}
+        {% for i in (1..9) %}
+          <div class="product-card placeholder">
+            <div class="product-image-wrapper">
+              {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">Example Product {{ i }}</h3>
+              <p class="product-price">$19.99</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Homepage Product Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Homepage Product Grid"
+    }
+  ]
+}
+{% endschema %}
