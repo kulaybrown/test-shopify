@@ -1,0 +1,12 @@
+{
+  "name": "FAQ Page",
+  "sections": {
+    "main_faq_content": {
+      "type": "faq-page-content",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main_faq_content"
+  ]
+}

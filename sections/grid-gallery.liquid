@@ -1,0 +1,47 @@
+<div class="mx-auto max-w-7xl px-4 transition-opacity duration-200">
+  {% comment %} {% if section.settings.title != blank %}
+    <div class="mb-8 text-center">
+      <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+        {{ section.settings.title | escape }}
+      </h2>
+    </div>
+  {% endif %} {% endcomment %}
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 w-full">
+    {% for i in (1..8) %}
+      {% liquid
+        assign filename = 'gallery-' | append: i | append: '.jpg'
+      %}
+      
+      <div class="relative overflow-hidden bg-gray-100 aspect-square w-full pointer-events-none select-none">
+        <img 
+          src="{{ filename | asset_url }}" 
+          alt="Gallery Image {{ i }}"
+          loading="lazy"
+          class="h-full w-full object-cover object-center"
+          width="600"
+          height="600"
+        >
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Grid Gallery",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Our Gallery"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Grid Gallery"
+    }
+  ]
+}
+{% endschema %}

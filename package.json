@@ -1,12 +1,13 @@
 {
   "name": "my-first-theme",
   "version": "1.0.0",
-  "description": "<h1 align=\"center\" style=\"position: relative;\">\r   <br>\r     <img src=\"./assets/shoppy-x-ray.svg\" alt=\"logo\" width=\"200\">\r   <br>\r   Shopify Skeleton Theme\r </h1>",
+  "description": "<h1 align=\"center\" style=\"position: relative;\">\r   <br>\r     <img src=\"./assets/shoppy-x-ray.svg\" alt=\"logo\" width=\"200\">\r   <br>\r   Shopify Skeleton Theme\r </h1>",
   "main": "src/js/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch:scss": "sass --watch src/scss/main.scss:assets/main.css --no-source-map",
     "watch:js": "esbuild src/js/main.js --bundle --outfile=assets/main.js --watch",
+    "watch:tailwind": "npx tailwindcss -i ./src/input.css -o ./assets/tailwind-built.css --watch",
     "dev:shopify": "shopify theme dev --store test-shop-store-lhmolbiz.myshopify.com",
     "start": "npm-run-all --parallel watch:scss watch:js dev:shopify"
   },
@@ -20,7 +21,7 @@
     "postcss": "^8.5.15",
     "postcss-cli": "^11.0.1",
     "sass": "^1.101.0",
-    "tailwindcss": "^4.3.1"
+    "tailwindcss": "^3.4.19"
   },
   "dependencies": {
     "jquery": "^4.0.0"

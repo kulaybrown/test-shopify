@@ -16,12 +16,13 @@
       {% comment %} Preload the base font variant for initial page render {% endcomment %}
       {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
     {% endunless %}
-
+    
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
-
-    <script src="https://cdn.tailwindcss.com"></script>
+    
     {{ 'main.css' | asset_url | stylesheet_tag }}
+    {{ 'tailwind-built.css' | asset_url | stylesheet_tag }}
+
     <script src="{{ 'main.js' | asset_url }}" defer></script>
     
     {% # Social, title, etc. %}
@@ -34,7 +35,40 @@
     {% sections 'header-group' %}
 
     {{ content_for_layout }}
-    {% section 'newsletter-subscribe' %}
+
+    <!-- SYSTEM TARGETING RULES -->
+    {% liquid
+      assign show_gallery = false
+      
+      # 1. Target the Homepage
+      if template.name == 'index'
+        assign show_gallery = true
+        
+      # 2. Target the 'All Products' list page (/collections/all or /products)
+      elsif template.name == 'collection' and collection.handle == 'all'
+        assign show_gallery = true
+        
+      # 3. Target the 'All Collections' overview list page (/collections)
+      elsif template.name == 'list-collections'
+        assign show_gallery = true
+        
+      # 4. Target Men's & Women's core collections or custom sub-collection layouts
+      elsif template.name == 'collection'
+        if collection.handle == 'mens' or collection.handle == 'womens' or template.suffix contains 'mens' or template.suffix contains 'womens'
+          assign show_gallery = true
+        endif
+      endif
+    %}
+
+    <!-- RENDER GALLERY IF CONDITION IS MET -->
+    {% if show_gallery %}
+      {% section 'grid-gallery' %}
+    {% endif %}
+
+    {% if template == 'index' or template.suffix == 'about' or template.suffix == 'faq' %}
+      {% section 'newsletter-subscribe' %}
+    {% endif %}
+
     {% sections 'footer-group' %}
     {% section 'cart-drawer' %}
   </body>
