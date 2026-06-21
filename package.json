@@ -9,7 +9,7 @@
     "watch:js": "esbuild src/js/main.js --bundle --outfile=assets/main.js --watch",
     "watch:tailwind": "npx tailwindcss -i ./src/input.css -o ./assets/tailwind-built.css --watch",
     "dev:shopify": "shopify theme dev --store test-shop-store-lhmolbiz.myshopify.com",
-    "start": "npm-run-all --parallel watch:scss watch:js dev:shopify"
+    "start": "npm-run-all --parallel watch:scss watch:js watch:tailwind dev:shopify"
   },
   "keywords": [],
   "author": "",
