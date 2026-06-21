@@ -1,7 +1,7 @@
 <footer class="site-footer bg-gray-900 text-gray-300 border-t border-gray-800 pt-16 pb-8 mt-auto">
   <div class="max-w-7xl mx-auto px-4">
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
       
       <div class="space-y-4">
         <h3 class="text-white text-lg font-bold tracking-wider uppercase">
@@ -43,6 +43,43 @@
               {%- endfor -%}
             {%- endif -%}
           {%- endfor -%}
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-white text-sm font-semibold uppercase tracking-wider mb-4">Support</h4>
+        <ul class="space-y-2.5 text-sm text-gray-400">
+          
+          {%- comment -%} 
+            Looks up the live 'about' or 'about-us' page handle dynamically. 
+            If your handle is 'about-us', change pages.about to pages['about-us']
+          {%- endcomment -%}
+          {%- if pages.about != blank or pages['about-us'] != blank -%}
+            {%- assign about_page = pages.about | default: pages['about-us'] -%}
+            <li>
+              <a href="{{ about_page.url }}" class="hover:text-white transition-colors duration-150">
+                {{ about_page.title }}
+              </a>
+            </li>
+          {%- endif -%}
+
+          {%- comment -%} 
+            Looks up the live 'faq' or 'faqs' page handle dynamically.
+          {%- endcomment -%}
+          {%- if pages.faq != blank or pages.faqs != blank -%}
+            {%- assign faq_page = pages.faq | default: pages.faqs -%}
+            <li>
+              <a href="{{ faq_page.url }}" class="hover:text-white transition-colors duration-150">
+                {{ faq_page.title }}
+              </a>
+            </li>
+          {%- endif -%}
+
+          <li>
+            <a href="/pages/contact" class="hover:text-white transition-colors duration-150">
+              Contact Support
+            </a>
+          </li>
         </ul>
       </div>
 
