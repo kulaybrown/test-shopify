@@ -9,12 +9,12 @@
  */
 {
   "sections": {
-    "accordion": {
-      "type": "faq-accordion",
+    "main_faq_content": {
+      "type": "faq-page-content",
       "settings": {}
     }
   },
   "order": [
-    "accordion"
+    "main_faq_content"
   ]
 }
