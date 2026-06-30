@@ -1,0 +1,43 @@
+<!-- HERO SECTION -->
+<section class="bg-gray-50 border-b border-gray-200 py-16 text-center">
+  <div class="max-w-3xl mx-auto px-4">
+    <span class="text-xs font-bold tracking-widest text-indigo-600 uppercase bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">Appointments</span>
+    <h1 class="text-4xl font-black uppercase tracking-tight text-gray-900 mt-4 mb-4">Book a Consultation</h1>
+    <p class="text-gray-600 text-base max-w-xl mx-auto leading-relaxed">
+      Select an available date and time slot from the scheduling calendar below to secure your session instantly.
+    </p>
+  </div>
+</section>
+
+<!-- CONTAINER SECTION -->
+<section class="max-w-4xl mx-auto px-4 py-16 lg:py-24">
+  <div class="bg-white p-6 border border-gray-200 rounded-lg shadow-xs min-h-[550px]">
+    {% if section.settings.cowlendar_code != blank %}
+      <!-- Cowlendar Injected Code Widget -->
+      <div class="cowlendar-embed-container">
+        {{ section.settings.cowlendar_code }}
+      </div>
+    {% else %}
+      <!-- Setup Instructions inside the Customizer Panel -->
+      <div class="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-gray-200 rounded-xl">
+        <p class="mt-1 text-sm text-gray-500 px-6 max-w-sm font-medium">
+          Paste your unique Cowlendar Custom Integration snippet code into the section settings sidebar block on your screen.
+        </p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Booking Page Layout",
+  "settings": [
+    {
+      "type": "html",
+      "id": "cowlendar_code",
+      "label": "Cowlendar Code Snippet",
+      "info": "Go to Cowlendar -> My Services -> More -> Custom Integration and copy the Inline Widget Code here."
+    }
+  ]
+}
+{% endschema %}
